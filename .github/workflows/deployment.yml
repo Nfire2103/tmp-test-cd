@@ -9,8 +9,13 @@ jobs:
     container: gcr.io/kaniko-project/executor:debug
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Build and push Docker image
         run: |
+          pwd
+          ls -a
+
           cat <<EOF > /kaniko/.docker/config.json
           {
             "auths": {
@@ -23,7 +28,7 @@ jobs:
 
           /kaniko/executor \
             --dockerfile="./backend/Dockerfile" \
-            --context "${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
+            --context "/workspace" \
             --destination "nfire2103/api:latest" \
             --cache \
             --reproducible \
