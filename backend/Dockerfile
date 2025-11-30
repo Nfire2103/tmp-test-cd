@@ -15,12 +15,13 @@ RUN cargo chef cook --release --locked --recipe-path recipe.json --bin $CRATE_NA
 COPY . .
 RUN cargo build --release --frozen --bin $CRATE_NAME
 
-FROM debian:12-slim AS runtime
+# TODO find a smaller base image
+FROM ubuntu:latest AS runtime
 RUN apt-get update \
     && apt-get install -y --no-install-recommends openssl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-ARG CRATE_NAME
+ARG CRATE_NAME=api
 COPY --from=builder /app/target/release/$CRATE_NAME /usr/local/bin/app
 COPY --from=builder /app/crates/$CRATE_NAME/templates /templates
 ENTRYPOINT ["/usr/local/bin/app"]
