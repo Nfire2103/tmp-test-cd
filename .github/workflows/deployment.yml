@@ -40,15 +40,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up kubeconfig
+      - name: Deploy charts to K3s
         run: |
           echo "${{ secrets.KUBECONFIG }}" > kubeconfig
           export KUBECONFIG=$(pwd)/kubeconfig
 
-      - name: Deploy to K3s
-        run: |
           echo $KUBECONFIG
-          echo $HOME
           cd backend/charts
           kubectl apply -f api.configmap.yaml \
             -f api.deployment.yaml \
