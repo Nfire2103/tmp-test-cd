@@ -1,0 +1,32 @@
+name: App deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: gcr.io/kaniko-project/executor:debug
+
+    steps:
+      - name: Build and push Docker image
+        run: |
+          cat <<EOF > /kaniko/.docker/config.json
+          {
+            "auths": {
+              "https://index.docker.io/v1/": {
+                "auth": "$(echo -n "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" | base64 )"
+              }
+            }
+          }
+          EOF
+
+          /kaniko/executor \
+            --dockerfile="./backend/Dockerfile" \
+            --context "${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
+            --destination "nfire2103/api:latest" \
+            --cache \
+            --reproducible \
+            --use-new-run \
+            --verbosity info \
+            --push-retry 5
