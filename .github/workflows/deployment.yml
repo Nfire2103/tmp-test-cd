@@ -44,3 +44,4 @@ jobs:
           export KUBECONFIG=$(pwd)/kubeconfig
 
           kubectl apply -f ./backend/charts
+          kubectl rollout restart deployment api
