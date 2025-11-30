@@ -45,10 +45,4 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > kubeconfig
           export KUBECONFIG=$(pwd)/kubeconfig
 
-          echo $KUBECONFIG
-          cd backend/charts
-          kubectl apply -f api.configmap.yaml \
-            -f api.deployment.yaml \
-            -f api.ingress-route.yaml \
-            -f api.secret.yaml \
-            -f api.service.yaml
+          kubectl apply -f ./backend/charts
