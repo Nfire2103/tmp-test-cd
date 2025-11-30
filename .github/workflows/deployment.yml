@@ -25,7 +25,6 @@ jobs:
             --dockerfile "./Dockerfile" \
             --context "${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
             --context-sub-path "./backend" \
-            --destination "nfire2103/api:${{ github.sha }}" \
             --destination "nfire2103/api:latest" \
             --reproducible \
             --use-new-run \

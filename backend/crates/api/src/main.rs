@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
     let app = api::build(app_state, node_state);
     let listener = TcpListener::bind(address).await?;
 
-    info!("Listening on {}", address);
+    info!("Listening ont {}", address);
 
     // TODO make a .into_make_service?
     axum::serve(listener, app).await?;
