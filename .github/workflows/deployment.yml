@@ -4,36 +4,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   container: gcr.io/kaniko-project/executor:debug
+  build:
+    runs-on: ubuntu-latest
+    container: gcr.io/kaniko-project/executor:debug
 
-  #   steps:
-  #     - name: Build and push Docker image
-  #       run: |
-  #         cat <<EOF > /kaniko/.docker/config.json
-  #         {
-  #           "auths": {
-  #             "https://index.docker.io/v1/": {
-  #               "auth": "$(echo -n "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" | base64 )"
-  #             }
-  #           }
-  #         }
-  #         EOF
+    steps:
+      - name: Build and push Docker image
+        run: |
+          cat <<EOF > /kaniko/.docker/config.json
+          {
+            "auths": {
+              "https://index.docker.io/v1/": {
+                "auth": "$(echo -n "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" | base64 )"
+              }
+            }
+          }
+          EOF
 
-  #         /kaniko/executor \
-  #           --dockerfile "./Dockerfile" \
-  #           --context "${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
-  #           --context-sub-path "./backend" \
-  #           --destination "nfire2103/api:latest" \
-  #           --cache \
-  #           --reproducible \
-  #           --use-new-run \
-  #           --verbosity info \
-  #           --push-retry 5
+          /kaniko/executor \
+            --dockerfile "./Dockerfile" \
+            --context "${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
+            --context-sub-path "./backend" \
+            --destination "nfire2103/api:${{ github.sha }}" \
+            --destination "nfire2103/api:latest" \
+            --reproducible \
+            --use-new-run \
+            --push-retry 5
 
   deploy:
-    # needs: build
+    needs: build
     runs-on: ubuntu-latest
     container: alpine/k8s:1.34.1
 
