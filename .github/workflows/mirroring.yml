@@ -12,12 +12,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: tmp
-        run: |
-          echo "${{ env.MIRROR_URL }}"
-          echo "$MIRROR_URL"
-          echo "${{ vars.MIRROR_URL }}"
-
       - name: Mirror repository
         uses: pixta-dev/repository-mirroring-action@v1.1.1
         with:
