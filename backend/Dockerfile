@@ -15,8 +15,7 @@ RUN cargo chef cook --release --locked --recipe-path recipe.json --bin $CRATE_NA
 COPY . .
 RUN cargo build --release --frozen --bin $CRATE_NAME
 
-# TODO find a smaller base image
-FROM ubuntu:latest AS runtime
+FROM debian:13-slim AS runtime
 RUN apt-get update \
     && apt-get install -y --no-install-recommends openssl \
     && apt-get clean \
